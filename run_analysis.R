@@ -2,6 +2,22 @@ run_analysis <- function() {
   # Load required R packages
   library(dplyr)
   
+  # Checks to see if file is downloaded and downloads it if not
+  fileName <- "UCI HAR Dataset.zip"
+  
+  if (!file.exists(fileName)) {
+    download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", fileName)
+  }
+  
+  # Checks to see if file has already been unzipped and unzips
+  # if not yet done
+  if (!file.exists("UCI HAR Dataset")) {
+    unzip(fileName)
+  }
+  
+  # Set working directory to be inside of "UCI HAR Dataset.zip"
+  setwd(paste(getwd(), "UCI HAR Dataset", sep = "/"))
+  
   # Store each test and train text files into separate data frames
   testx <- read.table(paste(getwd(),"test", "X_test.txt", sep = "/"))
   testy <- read.table(paste(getwd(),"test", "Y_test.txt", sep = "/"))
@@ -45,11 +61,6 @@ run_analysis <- function() {
   train[,2] <- as.factor(train[,2])
   levels(train[,2]) <- activity$V2
   
-  # Add a column in the beginning of test and train to distinguish
-  # the two data tables
-  test <- cbind(dataSource = as.factor("TEST"), test)
-  train <- cbind(dataSource = as.factor("TRAIN"), train)
-  
   # Merge test and train into a single data frame
   merged <- rbind(test, train)
   
@@ -67,10 +78,14 @@ run_analysis <- function() {
   colnames(merged) <- names
   
   # Output a file with the complete tidy data set
-  write(merged, "TidyData.txt")
+  write.table(merged, "TidyData.txt")
   
   # Take the average of each variable in a new data frame
-  cleanMergedNames <- names(merged)
-  cleanMergedMeans <- colMeans((cleanMerged))
+  # split by subject and activity
+  summary <- merged %>% 
+    group_by(Subject, Activity) %>%
+    summarise_each(funs(mean))
   
+  # Output a file with the summarized data set
+  write.table(summary, "MeanData.txt")
 }
