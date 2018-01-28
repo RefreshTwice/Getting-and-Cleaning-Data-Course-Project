@@ -27,3 +27,9 @@ The run_analysis.R file creates a function run_analysis() that must be ran in or
 10. Write out this data frame as the first clean data frame
 11. Group the rows of the data frame by the subject and activity, then find the mean of each column and store into a new variable
 12. Write out this new data frame as the second data frame with the mean of each measurement.
+
+## How to run the program
+-Make sure your device is connected to the internet to download the file if not yet downloaded.
+-Load run_analysis.R into R, RStudio, or any other program that can run R programming language.
+-In the command line, type "run_analysis()" without the parenthesis.
+-A file "UCI HAR Dataset.zip" and a folder "UCI HAR Dataset" should be created. Inside of the "UCI HAR Dataset" folder should be a collection of files and folders, including "TidyData.txt" and "MeanData.txt". The "TidyData.txt" is the first file with the data of only columns containing mean and standard deviation. The "MeanData.txt" is the second file with the mean for each measurement for each subject and activity.
